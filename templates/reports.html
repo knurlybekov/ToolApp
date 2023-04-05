@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block scr %}container {
+  display: grid;
+  grid-template-rows: 1fr 2fr;
+}
+
+.top-section {
+  grid-row: 1 / 2;
+}
+
+.middle-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.left-container {
+  grid-column: 1 / 2;
+}
+
+.right-container {
+  grid-column: 2 / 2;
+}{% endblock %}
+{% block content %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="form-group" style="flex: 1 0 200px; margin-left: 3%">
+  <form method="GET"><label for="menu">Select Side:</label>
+    <select id="menu" name="menu" onchange="handleMenuChange(this)">
+      {% for item in menu_items %}
+      <option value="{{ item.value }}">{{ item.label }}</option>
+      {% endfor %}
+    </select>
+  <button class="btn btn-secondary" type="submit">Show</button></form>
+  </div>
+</nav>
+{#<div id='chart' class='chart'”></div>#}
+
+    <div class="container">
+  <div class="top-section">
+        <div id='chart' class='chart'></div>
+  </div>
+  <div class="middle-section">
+    <div class="left-container">
+      <div id='boxplot' class='chart'></div>
+    </div>
+    <div class="right-container">
+      <div style="margin: 3%; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <table style="width: 100%; white-space: nowrap">
+    {{ table_html|safe }}
+  </table>
+  <div class="pagination">
+    {{ pagination.links|safe }}
+  </div>
+    </div>
+  </div>
+</div>
+    </div>
+
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script type='text/javascript'>
+  var graphs = {{graphJSON | safe}};
+  var boxplot = {{graphJSONbox | safe}};
+  Plotly.plot('chart',graphs,{});
+  Plotly.plot('boxplot',boxplot,{});
+</script>
+
+<script>
+function handleMenuChange(menu) {
+        if (menu.value === 'Works in process' || menu.value === 'Tools') {
+          document.getElementById('wip-menu').style.display = 'block';
+        } else {
+          document.getElementById('wip-menu').style.display = 'none';
+        }
+      }
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <script>
+  // get the form elements and their values
+  const form = document.querySelector('form');
+  const menuSelect = document.getElementById('menu');
+
+
+  // set the form element values to the previously selected values (if any)
+  const storedMenuValue = localStorage.getItem('menuValue');
+  if (storedMenuValue) {
+    menuSelect.value = storedMenuValue;
+  }
+
+
+
+  // function to handle form submission
+  function handleFormSubmit(event) {
+    event.preventDefault(); // prevent the form from submitting normally
+
+    // get the selected values from the form
+    const menuValue = menuSelect.value;
+
+
+    // perform some action based on the selected values
+    console.log(`Menu: ${menuValue}`);
+
+    // store the selected values in localStorage
+    localStorage.setItem('menuValue', menuValue);
+
+
+    // submit the form
+    event.target.submit();
+  }
+
+  // attach the event listener to the form
+  form.addEventListener('submit', handleFormSubmit);
+</script>
+{% endblock %}

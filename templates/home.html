@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{#{% block mt %}<meta http-equiv="refresh" content="10">{% endblock %}#}
+{% block title %}Home{% endblock %}
+{% block scr %}
+{% endblock %}
+{% block content %}
+    <div id="map" style="margin: 3%;">{{ map_html|safe }}</div>
+    <br>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables"></script>
+{#    <script>#}
+{#    function updateMarkersAndTable() {#}
+{#    $.ajax({#}
+{#        url: '/update_data',#}
+{#        type: 'GET',#}
+{#        dataType: 'json',#}
+{#        success: function(response) {#}
+{#            // Remove existing markers from the map#}
+{#            map.eachLayer(function (layer) {#}
+{#                if (layer instanceof L.Marker) {#}
+{#                    map.removeLayer(layer);#}
+{#                }#}
+{#            });#}
+{##}
+{#            // Add new markers to the map#}
+{#            for (var i = 0; i < response.data.length; i++) {#}
+{#                var marker = L.marker([response.data[i].lat, response.data[i].lon]).addTo(map);#}
+{#                marker.bindPopup(`Employee: ${response.data[i].employee}<br>Tool: ${response.data[i].tool}<br>Start Time: ${response.data[i].start_time}<br>End Time: ${response.data[i].end_time}`);#}
+{#            }#}
+{##}
+{#            // Update the table#}
+{#            $('#employees-table').DataTable().clear().rows.add(response.data).draw();#}
+{#        },#}
+{#        error: function(error) {#}
+{#            console.log(error);#}
+{#        }#}
+{#    });#}
+{#setInterval(updateMarkersAndTable, 10000); // Update every 10 seconds#}
+{##}
+{#    </script>#}
+
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}Tables{% endblock %}
+
+{% block content %}
+{#    <form method="get" action="{{ url_for('tables.download_csv') }}">#}
+{#      <button type="submit" class="btn btn-primary">#}
+{#        Download#}
+{#      </button></form>#}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%">
+        <form method="GET" style="display: flex; flex-wrap: wrap; height: auto; align-items: flex-start; width: 100%">
+        <input type="hidden" name="_method" value="GET">
+            <div class="container" style="width: 100%">
+                <div class="row" style="width: 100%">
+                    <div class="col-md-6">
+                        <label for="menu">Menu:</label>
+                        <select id="menu" name="menu" onchange="handleMenuChange(this)">
+                            {% for item in menu_items %}
+                                <option value="{{ item.value }}">{{ item.label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="wip-items">Select Side:</label>
+                        <select id="wip-items" name="wip-items">
+                            {% for item in wip_items %}
+                                <option value="{{ item.value }}">{{ item.label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="nameFind" name="nameFind" placeholder="Find by Name">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="startdate">Enter start date</label>
+                        <input type="date" id="startdate" name="startdate" value=""><br>
+                        <label for="enddate">Enter end date</label>
+                        <input type="date" id="enddate" name="enddate" value="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-secondary" type="submit" style="margin-top: 10px">Show</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </nav>
+    <br>
+    <div id="table-container">
+        <div style="margin: 3%; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <table style="width: 100%; white-space: nowrap">
+                {{ table_html|safe }}
+            </table>
+            <div class="pagination">
+                {{ pagination.links|safe }}
+            </div>
+        </div>
+    </div>
+<script>
+  function handleMenuChange() {
+    var menu = document.getElementById("menu");
+    var wip_items = document.getElementById("wip-items");
+    var nameFind = document.getElementById("nameFind");
+    var startdate = document.getElementById("startdate");
+    var enddate = document.getElementById("enddate");
+    var submitButton = document.querySelector('button[type="submit"]');
+
+    if (menu.value === "Employees") {
+      wip_items.disabled = true;
+      nameFind.disabled = false;
+      startdate.disabled = true;
+      enddate.disabled = true;
+      submitButton.disabled = false;
+    } else if (menu.value === "Tools") {
+
+      wip_items.disabled = false;
+      nameFind.disabled = true;
+      startdate.disabled = true;
+      enddate.disabled = true;
+      submitButton.disabled = false;
+
+    } else if (menu.value === "Works in process") {
+      wip_items.disabled = false;
+      nameFind.disabled = false;
+      startdate.disabled = false;
+      enddate.disabled = false;
+      submitButton.disabled = false;
+    }
+  }
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <script>
+  // get the form elements and their values
+  const form = document.querySelector('form');
+  const menuSelect = document.getElementById('menu');
+  const sideSelect = document.getElementById('wip-items');
+  const nameInput = document.getElementById('nameFind');
+  const startDateInput = document.getElementById('startdate');
+  const endDateInput = document.getElementById('enddate');
+
+  // set the form element values to the previously selected values (if any)
+  const storedMenuValue = localStorage.getItem('menuValue');
+  if (storedMenuValue) {
+    menuSelect.value = storedMenuValue;
+  }
+
+  const storedSideValue = localStorage.getItem('sideValue');
+  if (storedSideValue) {
+    sideSelect.value = storedSideValue;
+  }
+
+  const storedNameValue = localStorage.getItem('nameValue');
+  if (storedNameValue) {
+    nameInput.value = storedNameValue;
+  }
+
+  const storedStartDateValue = localStorage.getItem('startDateValue');
+  if (storedStartDateValue) {
+    startDateInput.value = storedStartDateValue;
+  }
+
+  const storedEndDateValue = localStorage.getItem('endDateValue');
+  if (storedEndDateValue) {
+    endDateInput.value = storedEndDateValue;
+  }
+
+  // function to handle form submission
+  function handleFormSubmit(event) {
+    event.preventDefault(); // prevent the form from submitting normally
+
+    // get the selected values from the form
+    const menuValue = menuSelect.value;
+    const sideValue = sideSelect.value;
+    const nameValue = nameInput.value;
+    const startDateValue = startDateInput.value;
+    const endDateValue = endDateInput.value;
+
+    // perform some action based on the selected values
+    console.log(`Menu: ${menuValue}, Side: ${sideValue}, Name: ${nameValue}, Start Date: ${startDateValue}, End Date: ${endDateValue}`);
+
+    // store the selected values in localStorage
+    localStorage.setItem('menuValue', menuValue);
+    localStorage.setItem('sideValue', sideValue);
+    localStorage.setItem('nameValue', nameValue);
+    localStorage.setItem('startDateValue', startDateValue);
+    localStorage.setItem('endDateValue', endDateValue);
+
+    // submit the form
+    event.target.submit();
+  }
+
+  // attach the event listener to the form
+  form.addEventListener('submit', handleFormSubmit);
+</script>
+{% endblock %}
