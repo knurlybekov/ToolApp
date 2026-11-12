@@ -57,4 +57,4 @@ Configure your database connection in `dbConn.py` before running.
 
 ## Origin
 
-Built for the ACRES equipment-tracking competition brief; the geospatial visualization (Folium/Leaflet zone polygons and markers) is the part I kept developing afterwards.
+Team entry in the Acres Enterprises Industry Innovation Competition (TRU, Feb–Apr 2023); the geospatial visualization (Folium/Leaflet zone polygons and markers) is the part I kept developing afterwards.
