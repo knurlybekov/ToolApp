@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 import pyodbc
@@ -6,7 +7,10 @@ import pandas as pd
 
 def connection():
     conn = pyodbc.connect(
-        'Driver={ODBC Driver 18 for SQL Server};Server=tcp:example.database.windows.net,1433;Database=toolsappdb;Uid=REDACTED;Pwd=REDACTED;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;')
+        f"Driver={os.environ.get('TOOLAPP_DB_DRIVER', '{ODBC Driver 18 for SQL Server}')};"
+        f"Server=tcp:{os.environ['TOOLAPP_DB_SERVER']},1433;Database={os.environ['TOOLAPP_DB_NAME']};"
+        f"Uid={os.environ['TOOLAPP_DB_USER']};Pwd={os.environ['TOOLAPP_DB_PASSWORD']};"
+        "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     cursor = conn.cursor()
     return conn
 

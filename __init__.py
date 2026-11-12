@@ -1,3 +1,4 @@
+import os
 from urllib import parse
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -13,12 +14,13 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     socketio = SocketIO(app)
-    driver = '{ODBC Driver 18 for SQL Server}'
-    server = 'example.database.windows.net'
-    database = 'toolsappdb'
-    username = 'REDACTED'
-    password = 'REDACTED'
-    app.config['SECRET_KEY'] = 'REDACTED'
+    # Connection settings come from the environment (see .env.example); nothing is hardcoded.
+    driver = os.environ.get('TOOLAPP_DB_DRIVER', '{ODBC Driver 18 for SQL Server}')
+    server = os.environ['TOOLAPP_DB_SERVER']
+    database = os.environ['TOOLAPP_DB_NAME']
+    username = os.environ['TOOLAPP_DB_USER']
+    password = os.environ['TOOLAPP_DB_PASSWORD']
+    app.config['SECRET_KEY'] = os.environ['TOOLAPP_SECRET_KEY']
     params = parse.quote_plus(
         f"Driver={driver};Server={server};Database={database};Uid={username};Pwd={password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30")
     app.config['SQLALCHEMY_DATABASE_URI'] = f"mssql+pyodbc:///?odbc_connect={params}"

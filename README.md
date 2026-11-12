@@ -33,6 +33,10 @@ dbConn.py       # DB connection + SQL queries
 templates/      # Jinja2 templates
 ```
 
+## Configuration
+
+Database and session settings are read from environment variables; copy `.env.example` to `.env` and fill it in. Passwords in the `employees` table are stored as entered by the original seed data; hashing them (e.g. `werkzeug.security`) is the first item on the backlog below.
+
 ## Running Locally
 
 ```bash
@@ -44,3 +48,13 @@ python app.py
 Configure your database connection in `dbConn.py` before running.
 
 > **Security note:** move database credentials out of `dbConn.py` into environment variables — do not commit connection strings.
+
+## Backlog
+
+- Hash stored passwords (`werkzeug.security.generate_password_hash`) and migrate the seed users
+- Replace raw `pyodbc` string queries in `dbConn.py` with SQLAlchemy models
+- Add a `requirements.txt` and a Dockerfile
+
+## Origin
+
+Built for the ACRES equipment-tracking competition brief; the geospatial visualization (Folium/Leaflet zone polygons and markers) is the part I kept developing afterwards.
