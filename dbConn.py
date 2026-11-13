@@ -100,7 +100,6 @@ def getUser(e_login):
     if result:
         # assign the values to separate variables
         e_login_result, e_password_result, e_id_result, e_fname_result, e_lname_result, e_position_result = result
-        print(e_login_result, e_password_result,  e_id_result, e_fname_result, e_lname_result, e_position_result)
         return e_login_result, e_password_result, e_id_result, e_fname_result, e_lname_result, e_position_result
     else:
         return None, None, None, None, None, None
@@ -171,3 +170,11 @@ def getemp():
     sql_query = "select * from employees"
     df = pd.read_sql_query(sql_query, conn)
     return df
+
+
+def setPasswordHash(e_login, password_hash):
+    conn = connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE employees SET e_password = ? WHERE e_login = ?", (password_hash, e_login))
+    conn.commit()
+    conn.close()

@@ -11,4 +11,4 @@ class employees(UserMixin, db.Model):
     e_department = db.Column(db.NVARCHAR(50), nullable=False)
     e_photo = db.Column(db.VARBINARY(max))
     e_login = db.Column(db.NVARCHAR(100), nullable=False)
-    e_password = db.Column(db.NVARCHAR(50), nullable=False)
+    e_password = db.Column(db.NVARCHAR(255), nullable=False)  # werkzeug hash

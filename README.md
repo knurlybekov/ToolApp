@@ -1,5 +1,6 @@
 # ToolApp
 
+
 A Flask web application for tracking tools and equipment across geographic work sites — who is using which tool, where, and for how long — visualized on an interactive map.
 
 ## Overview
@@ -35,7 +36,14 @@ templates/      # Jinja2 templates
 
 ## Configuration
 
-Database and session settings are read from environment variables; copy `.env.example` to `.env` and fill it in. Passwords in the `employees` table are stored as entered by the original seed data; hashing them (e.g. `werkzeug.security`) is the first item on the backlog below.
+Database and session settings are read from environment variables; copy `.env.example` to `.env` and fill it in. Passwords in the `employees` table are stored as werkzeug hashes (`toolapp_security`); rows seeded as plaintext are re-hashed on the user's next successful login.
+
+## Tests
+
+```bash
+pip install -r requirements.txt pytest
+pytest
+```
 
 ## Running Locally
 
@@ -51,7 +59,6 @@ Configure your database connection in `dbConn.py` before running.
 
 ## Backlog
 
-- Hash stored passwords (`werkzeug.security.generate_password_hash`) and migrate the seed users
 - Replace raw `pyodbc` string queries in `dbConn.py` with SQLAlchemy models
 - Add a `requirements.txt` and a Dockerfile
 

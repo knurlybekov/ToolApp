@@ -1,0 +1,11 @@
+flask
+flask-login
+flask-sqlalchemy
+flask-socketio
+pyodbc
+pandas
+folium
+plotly
+flask-paginate
+apscheduler
+werkzeug

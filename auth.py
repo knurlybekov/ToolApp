@@ -4,7 +4,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask_login import login_user, login_required, logout_user, current_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
-from dbConn import getUser
+from dbConn import getUser, setPasswordHash
+from toolapp_security import verify_password, hash_password
 
 
 db = SQLAlchemy()
@@ -29,11 +30,14 @@ def login():
         username = request.form['username']
         password = request.form['password']
         e_login_result, e_password_result, e_id_result, e_fname_result, e_lname_result, e_position_result = getUser(username)
-        if e_login_result is None or e_password_result != password:
+        ok, needs_rehash = verify_password(e_password_result, password) if e_login_result is not None else (False, False)
+        if not ok:
             error = 'Invalid username or password. Please try again.'
             flash(error, category='error')
         else:
-            user = User(e_login_result, e_password_result, e_id_result, e_fname_result, e_lname_result, e_position_result)
+            if needs_rehash:  # legacy plaintext row: store a hash on first successful login
+                setPasswordHash(e_login_result, hash_password(password))
+            user = User(e_login_result, None, e_id_result, e_fname_result, e_lname_result, e_position_result)
             login_user(user)
             return redirect('/')
     messages = get_flashed_messages(with_categories=True)
